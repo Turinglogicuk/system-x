@@ -25,6 +25,19 @@ This repository holds the **System X v4** LoRA adapter (17.4M parameters) for [Q
 
 > **Non-commercial use only.** The adapter is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You may use and adapt it with attribution, but not for commercial purposes. For commercial licensing, contact Turing Logic LTD.
 
+## Versions in this repository
+
+| Folder | Base model | Use |
+|---|---|---|
+| *(root)* | Qwen3-1.7B | **System X v4**, the main model |
+| `v4-0.6B/` | Qwen3-0.6B | **System X v4-0.6B**, the same training data on the smaller backbone. It is the paper's control run, and is smaller and faster. |
+
+To load the 0.6B version:
+```python
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-0.6B", dtype=torch.float32)
+model = PeftModel.from_pretrained(model, "TuringLogic/system-x", subfolder="v4-0.6B").merge_and_unload().eval()
+```
+
 ## What it does
 
 You give System X a situation (the *State*) and a numbered list of options.
@@ -86,6 +99,8 @@ Evaluated against the untrained Qwen3-1.7B:
 | Hand-written support cases (97) | 72.2% | **86.6%** |
 | ABCD next-step decisions (held out) | 48.3% | **86.0%** |
 | IFEval (prompt-level strict) | 66.0% | 64.5% (not significant, p = 0.71) |
+
+**System X v4-0.6B** (0.6B control): JevBench 51.5%, Banking77 55.5%, hand-written cases 84.5%, ABCD 88.3%, CFPB complaints 87.9%, IFEval 49.5% (untrained Qwen3-0.6B: 55.4%, 18.5%, 47.4%, 52.3%, 39.2% and 55.5%).
 
 **Latency:** replying from the decision's cache saves 17–39% of end-to-end latency (367 to 4,161 prompt tokens, Apple M4 Pro). In FP32 the cached reply is token-for-token identical to a full re-read.
 
