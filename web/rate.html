@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reply Rating</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ea; --paper: #fffdf8; --ink: #1d1b16; --muted: #6f6a5e; --line: #ddd6c6;
+    --accent: #b4441f; --accent-soft: #f6e3d9; --good: #2f6b4f; --good-soft: #dcefe4; --chip: #ece6d8;
+    --shadow: 0 1px 0 rgba(29,27,22,.04), 0 8px 24px -12px rgba(29,27,22,.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16140f; --paper: #1f1c16; --ink: #ede7da; --muted: #a39b8a; --line: #353026;
+      --accent: #e0774f; --accent-soft: #3a2419; --good: #6fc39a; --good-soft: #1d3328; --chip: #2a261e;
+      --shadow: 0 1px 0 rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16140f; --paper: #1f1c16; --ink: #ede7da; --muted: #a39b8a; --line: #353026;
+    --accent: #e0774f; --accent-soft: #3a2419; --good: #6fc39a; --good-soft: #1d3328; --chip: #2a261e;
+    --shadow: 0 1px 0 rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 "IBM Plex Sans", system-ui, sans-serif; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 28px 16px 64px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  h1 { font: 650 28px/1.1 "Fraunces", Georgia, serif; margin: 0; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 6px 0 0; max-width: 60ch; }
+  .progress { font: 500 13px "IBM Plex Mono", monospace; color: var(--muted); text-align: right; }
+  .bar { height: 4px; background: var(--line); border-radius: 2px; margin: 18px 0 22px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
+  .state { padding: 18px 20px; margin-bottom: 18px; }
+  .label { font: 600 11px/1 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .msg { font: 500 19px/1.4 "Fraunces", Georgia, serif; margin: 0 0 12px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fact { background: var(--chip); border-radius: 6px; padding: 3px 8px; font: 13px "IBM Plex Mono", monospace; overflow-wrap: anywhere; }
+  .fact b { font-weight: 500; color: var(--muted); }
+  .chat { display: grid; gap: 6px; font-size: 14px; }
+  .chat div { padding: 6px 10px; border-radius: 8px; background: var(--chip); max-width: 85%; overflow-wrap: anywhere; }
+  .chat .customer { justify-self: end; background: var(--accent-soft); }
+  .chat .system { justify-self: center; background: transparent; color: var(--muted); font: 12px "IBM Plex Mono", monospace; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+  .reply { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; border-width: 2px; transition: border-color .15s, background .15s; }
+  .reply.picked { border-color: var(--accent); background: var(--accent-soft); }
+  .reply p { margin: 0; font-size: 16px; white-space: pre-wrap; overflow-wrap: anywhere; flex: 1; }
+  .reply p.empty { color: var(--muted); font-style: italic; }
+  .ok { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; cursor: pointer; user-select: none; }
+  .ok input { accent-color: var(--good); width: 16px; height: 16px; }
+  .choose { display: flex; gap: 10px; justify-content: center; margin: 22px 0 10px; flex-wrap: wrap; }
+  button { font: 600 14px "IBM Plex Sans", sans-serif; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+           padding: 11px 18px; cursor: pointer; transition: transform .08s, border-color .15s, background .15s; }
+  button:hover { border-color: var(--accent); }
+  button:active { transform: translateY(1px); }
+  button.main { min-width: 150px; }
+  button.sel { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  kbd { font: 500 11px "IBM Plex Mono", monospace; border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; margin-left: 6px; opacity: .65; }
+  .nav { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 13px; gap: 10px; flex-wrap: wrap; }
+  .nav button { padding: 7px 12px; font-weight: 500; }
+  .done { text-align: center; padding: 48px 20px; }
+  .done h2 { font: 650 24px "Fraunces", serif; margin: 0 0 8px; }
+  .toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 8px 14px;
+           border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: .92; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Which reply would you send?</h1>
+      <p class="sub">Read the situation, then pick the better reply to send to this customer. Judge helpfulness, correct use of the facts shown (no made-up details), and whether it reads as a finished 1–2 sentence message. Tick “I'd send this” for every reply that is acceptable as is.</p>
+    </div>
+    <div class="progress"><div id="count">–</div><div id="saved"></div></div>
+  </header>
+  <div class="bar"><i id="fill"></i></div>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let items = [], done = {}, idx = 0, okA = false, okB = false;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+
+function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1200); }
+
+function renderState(st) {
+  let h = "";
+  if (Array.isArray(st.conversation)) {
+    h += `<div class="label">Conversation so far</div><div class="chat">` + st.conversation.map(l => {
+      const m = l.match(/^(customer|agent|system):\s*(.*)$/s);
+      return m ? `<div class="${m[1]}">${esc(m[2])}</div>` : `<div>${esc(l)}</div>`;
+    }).join("") + `</div>`;
+    const facts = Object.assign({}, st.account || {});
+    if (st.actions_taken && st.actions_taken.length) facts["actions taken"] = st.actions_taken.join(", ");
+    if (Object.keys(facts).length) h += `<div class="label" style="margin-top:14px">What the agent can see</div>` + factList(facts);
+    return h;
+  }
+  h += `<div class="label">Customer says</div><p class="msg">${esc(st.customer_msg || "")}</p>`;
+  const facts = {};
+  for (const [k, v] of Object.entries(st)) {
+    if (k === "customer_msg") continue;
+    if (v && typeof v === "object" && !Array.isArray(v)) for (const [k2, v2] of Object.entries(v)) facts[`${k}.${k2}`] = v2;
+    else facts[k] = v;
+  }
+  if (Object.keys(facts).length) h += `<div class="label" style="margin-top:6px">Facts the agent knows</div>` + factList(facts);
+  return h;
+}
+function factList(f) {
+  return `<div class="facts">` + Object.entries(f).map(([k, v]) =>
+    `<span class="fact"><b>${esc(k)}</b> ${esc(typeof v === "string" ? v : JSON.stringify(v))}</span>`).join("") + `</div>`;
+}
+
+function render() {
+  const n = Object.keys(done).length;
+  $("#count").textContent = `${n} / ${items.length} rated`;
+  $("#fill").style.width = `${100 * n / items.length}%`;
+  if (idx >= items.length) {
+    $("#main").innerHTML = `<div class="card done"><h2>All ${items.length} rated, thank you.</h2><p class="sub" style="margin:0 auto">Ratings are saved in out/human_ratings.jsonl. You can go back and change any of them.</p>
+      <div class="choose"><button onclick="go(0)">Back to the first item</button></div></div>`;
+    return;
+  }
+  const it = items[idx], prev = done[it.id];
+  okA = prev ? !!prev.a_ok : false; okB = prev ? !!prev.b_ok : false;
+  const reply = (side, text, ok) => `<div class="card reply" id="r${side}"><div class="label">Reply ${side}</div>
+      <p class="${text ? "" : "empty"}">${text ? esc(text) : "(empty reply)"}</p>
+      <label class="ok"><input type="checkbox" id="ok${side}" ${ok ? "checked" : ""}> I'd send this <kbd>${side === "A" ? "Q" : "W"}</kbd></label></div>`;
+  $("#main").innerHTML = `<section class="card state">${renderState(it.state)}</section>
+    <div class="pair">${reply("A", it.a, okA)}${reply("B", it.b, okB)}</div>
+    <div class="choose">
+      <button class="main" data-v="A">A is better<kbd>1</kbd></button>
+      <button class="main" data-v="tie">About the same<kbd>2</kbd></button>
+      <button class="main" data-v="B">B is better<kbd>3</kbd></button>
+    </div>
+    <div class="nav"><button onclick="go(idx-1)" ${idx ? "" : "disabled"}>← Previous</button>
+      <span>Item ${idx + 1} of ${items.length}${prev ? " · rated" : ""}</span>
+      <button onclick="go(nextOpen(idx))">Next unrated →</button></div>`;
+  if (prev) { mark(prev.better); }
+  document.querySelectorAll("button[data-v]").forEach(b => b.onclick = () => rate(b.dataset.v));
+  $("#okA").onchange = e => okA = e.target.checked;
+  $("#okB").onchange = e => okB = e.target.checked;
+}
+function mark(v) {
+  document.querySelectorAll("button[data-v]").forEach(b => b.classList.toggle("sel", b.dataset.v === v));
+  $("#rA").classList.toggle("picked", v === "A"); $("#rB").classList.toggle("picked", v === "B");
+}
+function nextOpen(from) { for (let k = from + 1; k < items.length; k++) if (!done[items[k].id]) return k; for (let k = 0; k < items.length; k++) if (!done[items[k].id]) return k; return items.length; }
+function go(k) { idx = Math.max(0, Math.min(items.length, k)); render(); window.scrollTo({top: 0}); }
+
+async function rate(v) {
+  const it = items[idx];
+  mark(v);
+  const rec = {id: it.id, better: v, a_ok: okA, b_ok: okB};
+  try {
+    const r = await fetch("/api/rate", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(rec)});
+    if (!r.ok) throw new Error((await r.json()).error);
+    done[it.id] = rec; toast("Saved");
+    setTimeout(() => go(nextOpen(idx)), 250);
+  } catch (e) { toast("Not saved: " + e.message); }
+}
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" && e.key === " ") return;
+  if (idx >= items.length) return;
+  if (e.key === "1") rate("A"); else if (e.key === "2") rate("tie"); else if (e.key === "3") rate("B");
+  else if (e.key.toLowerCase() === "q") { okA = !okA; $("#okA").checked = okA; }
+  else if (e.key.toLowerCase() === "w") { okB = !okB; $("#okB").checked = okB; }
+  else if (e.key === "ArrowLeft") go(idx - 1); else if (e.key === "ArrowRight") go(idx + 1);
+});
+
+fetch("/api/items").then(r => r.json()).then(d => {
+  items = d.items;
+  done = d.done;
+  idx = nextOpen(-1); render();
+}).catch(() => { $("#main").innerHTML = `<div class="card done"><h2>Can't reach the rating server.</h2><p class="sub">Start it with <code>uv run rate_server.py</code>.</p></div>`; });
+</script>
+</body>
+</html>
