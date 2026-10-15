@@ -205,11 +205,7 @@ uv run train_v2.py --base Qwen/Qwen3-1.7B --train data/v4/train.jsonl --out out/
 
 ## Trained weights
 
-Both adapters are on Hugging Face as the **private** model `drusama1979/decision_plus`, under **CC BY-NC 4.0 (non-commercial only)**. The model card is `hf/README.md`.
-- **v0.2** is on `main`: `DecisionEngine(adapter_path="drusama1979/decision_plus")`.
-- **v0.1**, the template-trained adapter, is at HF tag `v0.1` (load with `revision="v0.1"`) and at git tag `v0.1`. It uses the old prompt format.
-- **v0.3** is saved locally at `out/v3` and is not uploaded yet.
-- **v0.4** (1.7B) and the v0.4-0.6B control are saved locally at `out/v4` and `out/v4_06`, not uploaded yet.
+The released model is **System X v4** (Qwen3-1.7B) at [TuringLogic/system-x](https://huggingface.co/TuringLogic/system-x), under **CC BY-NC 4.0 (non-commercial only)**. Its model card is `hf/README.md`. Earlier versions (v0.1–v0.3) were development checkpoints and are not released.
 
 Training-data licenses (needed for any release):
 - CLINC150: CC BY 3.0

@@ -86,7 +86,7 @@ Every script prints its usage at the top of the file. The development log for v0
 
 ## Model weights
 
-The trained LoRA adapters will be released on Hugging Face (`drusama1979/decision_plus`) under **CC BY-NC 4.0**. The base Qwen3 models (Apache-2.0) are not redistributed.
+The trained System X v4 LoRA adapter is on Hugging Face at **[TuringLogic/system-x](https://huggingface.co/TuringLogic/system-x)** under **CC BY-NC 4.0**. The base Qwen3 models (Apache-2.0) are not redistributed.
 
 ## License
 
