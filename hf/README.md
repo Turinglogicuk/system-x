@@ -13,6 +13,18 @@ tags:
   - customer-support
   - kv-cache
   - qwen3
+extra_gated_heading: "Request access to System X"
+extra_gated_prompt: >-
+  System X is released by Turing Logic LTD under CC BY-NC 4.0, for non-commercial use only.
+  Each access request is reviewed and approved by Turing Logic LTD. For commercial licensing, contact Turing Logic LTD.
+extra_gated_fields:
+  Full name: text
+  Affiliation / organisation: text
+  Country: country
+  Intended use: text
+  I agree to use this model for non-commercial purposes only, under the CC BY-NC licence: checkbox
+  I will cite the System X paper in any published work that uses this model: checkbox
+extra_gated_button_content: "Request access"
 ---
 
 # System X: An LLM Decision Model That Replies from Its Own KV Cache
@@ -22,6 +34,8 @@ tags:
 **Code and paper:** [github.com/Turinglogicuk/system-x](https://github.com/Turinglogicuk/system-x)
 
 This repository holds the **System X v4** LoRA adapter (17.4M parameters) for [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B). The base model is not included; it downloads separately under its own Apache-2.0 license.
+
+> **Access is by approval.** Request access with the form on this page; Turing Logic LTD reviews each request.
 
 > **Non-commercial use only.** The adapter is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You may use and adapt it with attribution, but not for commercial purposes. For commercial licensing, contact Turing Logic LTD.
 
