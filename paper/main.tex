@@ -33,7 +33,9 @@
 \and
 Dr. Syed Safwan Khalid\\
 \small Idrak AI LTD}
-\date{October 2026}
+\date{October 2026\\[0.5em]
+\small Code: \url{https://github.com/Turinglogicuk/system-x}\\
+Model: \url{https://huggingface.co/TuringLogic/system-x}}
 
 \begin{document}
 \maketitle
@@ -600,7 +602,7 @@ The run with added crowdworker dialogue, industry and complaint data (\sysplus{}
 
 \sysfour{} (\S\ref{sec:v4}) moves to Qwen3-1.7B, rebalances the mixture and trains on teacher-rewritten reply targets. Against its base LLM, it improves JevBench, Banking77 and the hand-written set, shows no statistically significant IFEval change, and is accompanied by a latency test on the unadapted 1.7B backbone. Against an unadapted Qwen3-1.7B second call, one LLM judge prefers its replies significantly (Claude, $p=0.003$) and the other's preference is not significant (Gemma, $p=0.11$). Its 0.6B control keeps the support-task gains and improves the hand-written set, but not JevBench. State conflicts remain the main decision failure, and invented placeholder phone numbers the main reply failure. Seed variance, a human evaluation of replies and a controlled ablation of the teacher rewrite are still missing. Further studies with several seeds, human raters and real customer-support data are recommended. The findings would further pave the pathway for small, single-model agents that decide and reply as an adjunct tool for customer-support teams.
 
-\paragraph{Code, models and reproducibility.} The code is at \url{https://github.com/Turinglogicuk/system-x} and will be public at release. It contains the data preparation, training, evaluation, latency and judging scripts, a dependency lockfile and run instructions; the per-example evaluation outputs can be regenerated with these scripts. The trained LoRA adapters will be released on Hugging Face at \url{https://huggingface.co/drusama1979/decision_plus} under the proposed CC~BY-NC~4.0 terms (non-commercial use only), subject to resolving the training-data licence questions in Appendix~\ref{app:licenses}. These proposed adapter terms do not by themselves establish compatibility with every upstream dataset licence. The base models are not redistributed.
+\paragraph{Code, models and reproducibility.} The code is publicly available at \url{https://github.com/Turinglogicuk/system-x}. It contains the data preparation, training, evaluation, latency and judging scripts, a dependency lockfile and run instructions; the per-example evaluation outputs can be regenerated with these scripts. The trained \sysfour{} LoRA adapter is released on Hugging Face at \url{https://huggingface.co/TuringLogic/system-x} under the proposed CC~BY-NC~4.0 terms (non-commercial use only), subject to resolving the training-data licence questions in Appendix~\ref{app:licenses}. These proposed adapter terms do not by themselves establish compatibility with every upstream dataset licence. The base models are not redistributed.
 
 \paragraph{Acknowledgements.} We build directly on the LLM-as-Jev prompt, readout, objective and data recipe of \citet{li2026llmasjev}. The base models Qwen3-0.6B and Qwen3-1.7B and the teacher Qwen3-14B are by the Qwen team (Apache-2.0). Jev and JevBench inspired this work; it is not affiliated with TypeSafe AI.
 
