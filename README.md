@@ -33,9 +33,19 @@ State + options ──► 1 prefill + batched suffix scoring ──► P([1]) P(
 | ABCD next-step decisions (held out) | 48.3% | **86.0%** |
 | IFEval (prompt-level strict) | 66.0% | 64.5% (not significant, p = 0.71) |
 
+![System X v4 against untrained Qwen3-1.7B: accuracy rises and calibration error falls on all seven decision sets](docs/figures/decisions_v4.png)
+
+The 0.6B models traded instruction following for support-task accuracy; at 1.7B, v4 keeps the support gains without a significant IFEval change:
+
+<p align="center"><img src="docs/figures/tradeoff.png" width="62%" alt="ABCD next-step accuracy against IFEval for all six models"></p>
+
 **Latency:** replying from the decision's cache saves **17–39%** of end-to-end latency at 1.7B (367 to 4,161 prompt tokens), and 15–37% at 0.6B. In FP32 the cached reply is token-for-token identical to a full re-read.
 
+![Latency of a decision plus a 32-token reply: System X against a two-call pipeline, by prompt length](docs/figures/latency.png)
+
 **Reply quality:** of two LLM judges, one (Claude Opus 5.5) prefers v4's replies to a separate, unadapted Qwen3-1.7B reply call (31 to 11 pairs, p = 0.003). The other (Gemma 4 31B) shows no significant preference (66 to 48 pairs, p = 0.11). These comparisons also differ in prompts and training.
+
+![Pairwise reply comparisons of System X v4 against each other source, for both LLM judges](docs/figures/judges.png)
 
 **Remaining failure modes:** decisions that contradict account state (e.g. an address change on a shipped order), and occasional invented placeholder phone numbers.
 
@@ -82,6 +92,7 @@ Every script prints its usage at the top of the file. The development log for v0
 | `data/` | Dataset builders, and the 97 hand-written test cases |
 | `train_v2.py` | Training: listwise loss, KL anchors, Brier, reply LM and KL |
 | `paper/` | LaTeX source and PDF |
+| `docs/figures/` | README figures; regenerate with `python paper_v2/figures/make_figures.py --png docs/figures hf/figures` |
 | `web/`, `server.py`, `rate_server.py` | Local decision console and a blind A/B rating page |
 
 ## Model weights
