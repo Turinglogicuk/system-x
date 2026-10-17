@@ -1,8 +1,8 @@
 # System X: An LLM Decision Model That Replies from Its Own KV Cache
 
-**Authors:** Dr. Syed Usama Khalid Bukhari (Turing Logic LTD), Dr. Syed Safwan Khalid (Idrak AI LTD)
+**Authors:** Dr. Syed Usama Khalid Bukhari (Turing Logic LTD), Dr. Syed Safwan Khalid (Idrak AI LTD), Dr. Muhammad Aamir (University of Oxford)
 
-**Paper:** [`paper/main.pdf`](paper/main.pdf) (arXiv link to follow)
+<!--**Paper:** [`paper/main.pdf`](paper/main.pdf) (arXiv link to follow)-->
 
 ## What it is
 
