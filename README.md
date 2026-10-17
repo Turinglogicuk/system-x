@@ -1,8 +1,8 @@
 # System X: An LLM Decision Model That Replies from Its Own KV Cache
 
-**Authors:** Dr. Syed Usama Khalid Bukhari (Turing Logic LTD), Dr. Syed Safwan Khalid (Idrak AI LTD)
+**Authors:** Dr. Syed Usama Khalid Bukhari (Turing Logic LTD), Dr. Syed Safwan Khalid (Idrak AI LTD), Dr. Muhammad Aamir (University of Oxford)
 
-**Paper:** [`paper/main.pdf`](paper/main.pdf) (arXiv link to follow)
+<!--**Paper:** [`paper/main.pdf`](paper/main.pdf) (arXiv link to follow)-->
 
 ## What it is
 
@@ -114,7 +114,7 @@ This work builds on the LLM-as-Jev prompt, readout, objective and data recipe (L
 ```bibtex
 @misc{bukhari2026systemx,
   title  = {System X: An LLM Decision Model That Replies from Its Own KV Cache},
-  author = {Bukhari, Syed Usama Khalid and Khalid, Syed Safwan},
+  author = {Bukhari, Syed Usama Khalid., Khalid, Syed Safwan., and Aamir, Muhammad.},
   year   = {2026},
   note   = {Turing Logic LTD; code at https://github.com/Turinglogicuk/system-x}
 }
